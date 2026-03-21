@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&display=swap');
+
+body {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  background:
+    linear-gradient(rgba(247, 241, 233, 0.92), rgba(247, 241, 233, 0.92)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900' viewBox='0 0 900 900'%3E%3Cg opacity='0.28'%3E%3Cg transform='translate(120 120)'%3E%3Cline x1='0' y1='100' x2='40' y2='0' stroke='%23b8b09e' stroke-width='2'/%3E%3Ccircle cx='48' cy='-6' r='8' fill='%23ffffff'/%3E%3Ccircle cx='35' cy='10' r='7' fill='%23fffaf4'/%3E%3Ccircle cx='60' cy='12' r='7' fill='%23fffaf4'/%3E%3C/g%3E%3Cg transform='translate(700 180)'%3E%3Cline x1='0' y1='100' x2='-30' y2='10' stroke='%23b8b09e' stroke-width='2'/%3E%3Ccircle cx='-38' cy='4' r='8' fill='%23ffffff'/%3E%3Ccircle cx='-20' cy='15' r='7' fill='%23fffaf4'/%3E%3Ccircle cx='-48' cy='20' r='7' fill='%23fffaf4'/%3E%3C/g%3E%3Cg transform='translate(180 700)'%3E%3Cline x1='0' y1='100' x2='50' y2='15' stroke='%23b8b09e' stroke-width='2'/%3E%3Ccircle cx='58' cy='8' r='8' fill='%23ffffff'/%3E%3Ccircle cx='44' cy='22' r='7' fill='%23fffaf4'/%3E%3Ccircle cx='70' cy='24' r='7' fill='%23fffaf4'/%3E%3C/g%3E%3Cg transform='translate(720 700)'%3E%3Cline x1='0' y1='100' x2='-45' y2='20' stroke='%23b8b09e' stroke-width='2'/%3E%3Ccircle cx='-53' cy='13' r='8' fill='%23ffffff'/%3E%3Ccircle cx='-35' cy='26' r='7' fill='%23fffaf4'/%3E%3Ccircle cx='-62' cy='28' r='7' fill='%23fffaf4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-attachment: fixed;
+  color: #5b4b3f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 32px 20px 60px;
+}
+
+.brand-title {
+  font-family: "Great Vibes", cursive;
+  font-size: 3.5rem;
+  text-align: center;
+  margin: 0 0 12px;
+  color: #7d6758;
+}
+
+.brand-subtitle {
+  text-align: center;
+  font-size: 1.15rem;
+  margin-bottom: 24px;
+  color: #7d6758;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 34px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #7a6555;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.nav-link:hover {
+  color: #a07f68;
+}
+
+.nav-button {
+  border: none;
+  background: #b89a86;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.1rem;
+}
+
+.page-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 68vh;
+}
+
+.card {
+  width: 100%;
+  max-width: 560px;
+  background: rgba(255, 251, 246, 0.88);
+  border: 1px solid rgba(184, 154, 134, 0.25);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 35px rgba(91, 75, 63, 0.08);
+  backdrop-filter: blur(4px);
+}
+
+.card-wide {
+  max-width: 760px;
+}
+
+.page-title {
+  font-family: "Great Vibes", cursive;
+  text-align: center;
+  font-size: 2.4rem;
+  margin: 0 0 22px;
+  color: #7d6758;
+}
+
+.form-input {
+  width: 100%;
+  display: block;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid #d9c7b8;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  color: #5b4b3f;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #b89a86;
+  box-shadow: 0 0 0 3px rgba(184, 154, 134, 0.18);
+}
+
+.primary-button {
+  border: none;
+  background: #b89a86;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.primary-button:hover {
+  background: #a78670;
+}
+
+.message {
+  margin-top: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.success {
+  color: #5d8a62;
+}
+
+.error {
+  color: #b05f5f;
+}
+
+.guest-banner {
+  color: #8b6b3f;
+  background: #fff2dd;
+  padding: 12px 14px;
+  border-radius: 16px;
+  margin-bottom: 18px;
+  border: 1px solid #f0dbc0;
+}
+
+.response-box,
+.history-item {
+  margin-top: 22px;
+  border: 1px solid #eadfd4;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  border-radius: 18px;
+}
+
+.disclaimer {
+  margin-top: 16px;
+  color: #a34f4f;
+  font-weight: 700;
+}
+
+.history-list {
+  display: grid;
+  gap: 16px;
+}
+
+.section-label {
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #7a6555;
+}
