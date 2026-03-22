@@ -5,41 +5,42 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+console.log("API URL:", process.env.REACT_APP_API_URL);
+ const handleRegister = async () => {
+  try {
+    const API_URL = process.env.REACT_APP_API_URL;
 
-  const handleRegister = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password
-        })
-      });
+    const res = await fetch(`${API_URL}/api/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password
+      })
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (res.ok) {
-        setMessage("✅ Account created successfully! Redirecting to Ask Question...");
+    if (res.ok) {
+      setMessage("✅ Account created successfully! Redirecting to Ask Question...");
 
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-        }
-
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 2000);
-      } else {
-        setMessage(data.message || "Registration failed");
+      if (data.token) {
+        localStorage.setItem("token", data.token);
       }
-    } catch (error) {
-      setMessage("Failed to connect to backend");
-    }
-  };
 
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    } else {
+      setMessage(data.message || "Registration failed");
+    }
+  } catch (error) {
+    setMessage("Failed to connect to backend");
+  }
+};
   return (
     <div className="page-center">
       <div className="card">

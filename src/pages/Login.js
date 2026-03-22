@@ -7,26 +7,36 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const API_URL = process.env.REACT_APP_API_URL;
+
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
-          password
-        })
+          password,
+        }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "/";
+        setMessage("✅ Login successful! Redirecting...");
+
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1500);
       } else {
         setMessage(data.message || "Login failed");
       }
     } catch (error) {
+      console.error("Login error:", error);
       setMessage("Failed to connect to backend");
     }
   };
@@ -57,7 +67,7 @@ function Login() {
         </button>
 
         {message && (
-          <p className={`message ${message.toLowerCase().includes("failed") ? "error" : "success"}`}>
+          <p className={`message ${message.includes("successful") ? "success" : "error"}`}>
             {message}
           </p>
         )}

@@ -10,48 +10,49 @@ function AskQuestions() {
   const isGuest = !token;
 
   const handleAskQuestion = async () => {
-    if (!question.trim()) {
-      setResponse("Please enter a question.");
-      return;
+  if (!question.trim()) {
+    setResponse("Please enter a question.");
+    return;
+  }
+
+  if (!token) {
+    setResponse("Please log in to save and view your questions.");
+    return;
+  }
+
+  setLoading(true);
+  setResponse("");
+
+  try {
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    const res = await fetch(`${API_URL}/api/questions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        question_text: question,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setResponse(data.data?.ai_response || "No answer returned.");
+
+      setQuestion("");
+    } else {
+      setResponse(data.message || "Something went wrong.");
     }
-
-    setLoading(true);
-    setResponse("");
-
-    try {
-      const endpoint = token
-        ? "http://localhost:5000/api/questions"
-        : "http://localhost:5000/api/questions/guest";
-
-      const headers = {
-        "Content-Type": "application/json"
-      };
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
-
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
-          question_text: question
-        })
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setResponse(data.data.ai_response);
-      } else {
-        setResponse(data.message || "Something went wrong.");
-      }
-    } catch (error) {
-      setResponse("Failed to connect to backend.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error) {
+    console.error("Ask question error:", error);
+    setResponse("Failed to connect to backend.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="page-center">
@@ -60,7 +61,8 @@ function AskQuestions() {
 
         {isGuest && (
           <p className="guest-banner">
-            You are continuing as a guest. Your question history will not be saved for later review.
+            You are continuing as a guest. Your question history will not be
+            saved for later review.
           </p>
         )}
 
@@ -82,8 +84,8 @@ function AskQuestions() {
             <ReactMarkdown>{response}</ReactMarkdown>
 
             <p className="disclaimer">
-              ⚠️ This information is for general purposes only and is not medical advice.
-              Please consult a qualified healthcare professional.
+              ⚠️ This information is for general purposes only and is not medical
+              advice. Please consult a qualified healthcare professional.
             </p>
           </div>
         )}
