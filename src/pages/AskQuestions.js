@@ -10,69 +10,68 @@ function AskQuestions() {
   const isGuest = !token;
 
   const handleAskQuestion = async () => {
-    if (!question.trim()) {
-      return;
+  if (!question.trim()) {
+    return;
+  }
+
+  const currentQuestion = question;
+  setLoading(true);
+
+  try {
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    const endpoint = token
+      ? `${API_URL}/api/questions`
+      : `${API_URL}/api/questions/guest`;
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
     }
 
-    if (!token) {
-      return;
-    }
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        question_text: currentQuestion,
+      }),
+    });
 
-    const currentQuestion = question;
+    const data = await res.json();
 
-    setLoading(true);
+    if (res.ok) {
+      const aiText = token
+        ? data.data?.ai_response || "No answer returned."
+        : data.data?.ai_response || "No answer returned.";
 
-    try {
-      const API_URL = process.env.REACT_APP_API_URL;
-
-      const res = await fetch(`${API_URL}/api/questions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          question_text: currentQuestion,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setMessages((prev) => [
-          ...prev,
-          { type: "question", text: currentQuestion },
-          {
-            type: "answer",
-            text: data.data?.ai_response || "No answer returned.",
-          },
-        ]);
-
-        setQuestion("");
-      } else {
-        setMessages((prev) => [
-          ...prev,
-          { type: "question", text: currentQuestion },
-          {
-            type: "answer",
-            text: data.message || "Something went wrong.",
-          },
-        ]);
-      }
-    } catch (error) {
-      console.error("Ask question error:", error);
       setMessages((prev) => [
         ...prev,
         { type: "question", text: currentQuestion },
-        {
-          type: "answer",
-          text: "Failed to connect to backend.",
-        },
+        { type: "answer", text: aiText },
       ]);
-    } finally {
-      setLoading(false);
+
+      setQuestion("");
+    } else {
+      setMessages((prev) => [
+        ...prev,
+        { type: "question", text: currentQuestion },
+        { type: "answer", text: data.message || "Something went wrong." },
+      ]);
     }
-  };
+  } catch (error) {
+    console.error("Ask question error:", error);
+    setMessages((prev) => [
+      ...prev,
+      { type: "question", text: currentQuestion },
+      { type: "answer", text: "Failed to connect to backend." },
+    ]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="page-center">
