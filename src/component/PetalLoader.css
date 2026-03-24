@@ -1,0 +1,64 @@
+.petal-loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(247, 241, 233, 0.78);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.petal-loader-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.petal-loader-text {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Great Vibes", cursive;
+  font-size: 2.4rem;
+  color: #9a7c6b;
+  z-index: 2;
+}
+
+.petal {
+  position: absolute;
+  top: -40px;
+  width: 18px;
+  height: 26px;
+  background: radial-gradient(circle at 30% 30%, #fff7fb, #e7c9d8 70%);
+  border-radius: 70% 30% 70% 30%;
+  opacity: 0.8;
+  animation-name: fallPetal;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transform: rotate(20deg);
+}
+
+.petal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.35;
+}
+
+@keyframes fallPetal {
+  0% {
+    transform: translateY(-40px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(50vh) translateX(20px) rotate(120deg);
+  }
+  100% {
+    transform: translateY(110vh) translateX(-25px) rotate(260deg);
+    opacity: 0;
+  }
+}

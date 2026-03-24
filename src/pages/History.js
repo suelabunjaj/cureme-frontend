@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import PetalLoader from "../components/PetalLoader";
 
 function History() {
   const [history, setHistory] = useState([]);
@@ -44,35 +45,37 @@ function History() {
   }, []);
 
   return (
-    <div className="page-center">
-      <div className="card card-wide">
-        <h2 className="page-title">History</h2>
+    <>
+      {loading && <PetalLoader />}
 
-        {loading && <p>Loading...</p>}
+      <div className="page-center">
+        <div className="card card-wide">
+          <h2 className="page-title">History</h2>
 
-        {message && <p className="message error">{message}</p>}
+          {message && <p className="message error">{message}</p>}
 
-        {!loading && history.length > 0 && (
-          <div className="history-list">
-            {history.map((item, index) => (
-              <div key={item.id || index} className="history-item">
-                <div className="section-label">Question</div>
-                <p>{item.question_text}</p>
+          {!loading && history.length > 0 && (
+            <div className="history-list">
+              {history.map((item, index) => (
+                <div key={item.id || index} className="history-item">
+                  <div className="section-label">Question</div>
+                  <p>{item.question_text}</p>
 
-                <div className="section-label">Answer</div>
-                <ReactMarkdown>
-                  {item.ai_response || "No answer found."}
-                </ReactMarkdown>
-              </div>
-            ))}
-          </div>
-        )}
+                  <div className="section-label">Answer</div>
+                  <ReactMarkdown>
+                    {item.ai_response || "No answer found."}
+                  </ReactMarkdown>
+                </div>
+              ))}
+            </div>
+          )}
 
-        {!loading && history.length === 0 && !message && (
-          <p className="message">No history found yet.</p>
-        )}
+          {!loading && history.length === 0 && !message && (
+            <p className="message">No history found yet.</p>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
