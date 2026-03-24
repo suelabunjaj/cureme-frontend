@@ -3,56 +3,76 @@ import ReactMarkdown from "react-markdown";
 
 function AskQuestions() {
   const [question, setQuestion] = useState("");
-  const [response, setResponse] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token");
   const isGuest = !token;
 
   const handleAskQuestion = async () => {
-  if (!question.trim()) {
-    setResponse("Please enter a question.");
-    return;
-  }
-
-  if (!token) {
-    setResponse("Please log in to save and view your questions.");
-    return;
-  }
-
-  setLoading(true);
-  setResponse("");
-
-  try {
-    const API_URL = process.env.REACT_APP_API_URL;
-
-    const res = await fetch(`${API_URL}/api/questions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        question_text: question,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setResponse(data.data?.ai_response || "No answer returned.");
-
-      setQuestion("");
-    } else {
-      setResponse(data.message || "Something went wrong.");
+    if (!question.trim()) {
+      return;
     }
-  } catch (error) {
-    console.error("Ask question error:", error);
-    setResponse("Failed to connect to backend.");
-  } finally {
-    setLoading(false);
-  }
-};
+
+    if (!token) {
+      return;
+    }
+
+    const currentQuestion = question;
+
+    setLoading(true);
+
+    try {
+      const API_URL = process.env.REACT_APP_API_URL;
+
+      const res = await fetch(`${API_URL}/api/questions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          question_text: currentQuestion,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessages((prev) => [
+          ...prev,
+          { type: "question", text: currentQuestion },
+          {
+            type: "answer",
+            text: data.data?.ai_response || "No answer returned.",
+          },
+        ]);
+
+        setQuestion("");
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { type: "question", text: currentQuestion },
+          {
+            type: "answer",
+            text: data.message || "Something went wrong.",
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error("Ask question error:", error);
+      setMessages((prev) => [
+        ...prev,
+        { type: "question", text: currentQuestion },
+        {
+          type: "answer",
+          text: "Failed to connect to backend.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="page-center">
@@ -66,6 +86,24 @@ function AskQuestions() {
           </p>
         )}
 
+        {messages.length > 0 && (
+          <div className="response-box">
+            <h3 className="section-label">Conversation</h3>
+
+            {messages.map((msg, index) => (
+              <div key={index} style={{ marginBottom: "12px" }}>
+                <strong>{msg.type === "question" ? "You:" : "AI:"}</strong>
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              </div>
+            ))}
+
+            <p className="disclaimer">
+              ⚠️ This information is for general purposes only and is not medical
+              advice. Please consult a qualified healthcare professional.
+            </p>
+          </div>
+        )}
+
         <input
           className="form-input"
           type="text"
@@ -74,21 +112,13 @@ function AskQuestions() {
           onChange={(e) => setQuestion(e.target.value)}
         />
 
-        <button className="primary-button" onClick={handleAskQuestion}>
+        <button
+          className="primary-button"
+          onClick={handleAskQuestion}
+          disabled={loading}
+        >
           {loading ? "Asking..." : "Ask AI"}
         </button>
-
-        {response && (
-          <div className="response-box">
-            <h3 className="section-label">AI Response</h3>
-            <ReactMarkdown>{response}</ReactMarkdown>
-
-            <p className="disclaimer">
-              ⚠️ This information is for general purposes only and is not medical
-              advice. Please consult a qualified healthcare professional.
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
